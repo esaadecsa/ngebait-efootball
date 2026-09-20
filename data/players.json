@@ -1,0 +1,69 @@
+{
+  "updatedAt": "2026-09-19T00:00:00Z",
+  "source": "PlayersDB",
+  "players": [
+    {
+      "id": "129961",
+      "name": "Alphonso Davies",
+      "position": "LB",
+      "ovr": 85,
+      "club": "Bayern",
+      "nationality": "Canada",
+      "source": "https://playersdb.app/player?id=129961"
+    },
+    {
+      "id": "134931",
+      "name": "Senne Lammens",
+      "position": "GK",
+      "ovr": 82,
+      "club": "Manchester United",
+      "nationality": "Belgium",
+      "source": "https://playersdb.app/player?id=134931"
+    },
+    {
+      "id": "141470",
+      "name": "Koni De Winter",
+      "position": "CB",
+      "ovr": 75,
+      "club": "Milan",
+      "nationality": "Belgium",
+      "source": "https://playersdb.app/player?id=141470"
+    },
+    {
+      "id": "60519",
+      "name": "John Lundstram",
+      "position": "CMF",
+      "ovr": 71,
+      "club": "Trabzonspor",
+      "nationality": "England",
+      "source": "https://playersdb.app/player?id=60519"
+    },
+    {
+      "id": "185593",
+      "name": "Alex González",
+      "position": "LWF",
+      "ovr": 69,
+      "club": "Barcelona",
+      "nationality": "Spain",
+      "source": "https://playersdb.app/player?id=185593"
+    },
+    {
+      "id": "105028",
+      "name": "Dénes Dibusz",
+      "position": "GK",
+      "ovr": 77,
+      "club": "Ferencváros",
+      "nationality": "Hungary",
+      "source": "https://playersdb.app/player?id=105028"
+    },
+    {
+      "id": "47016",
+      "name": "Alex McCarthy",
+      "position": "GK",
+      "ovr": 68,
+      "club": "Leicester",
+      "nationality": "England",
+      "source": "https://playersdb.app/player?id=47016"
+    }
+  ]
+}
