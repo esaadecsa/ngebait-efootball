@@ -1,0 +1,52 @@
+<!-- NGEBAIT - Blogger embed -->
+<div id="ngebait-app">
+  <div class="nb-head">
+    <div><b>Ngebait</b><span> eFootball Database</span></div>
+    <small id="nb-status">Memuat database…</small>
+  </div>
+  <div class="nb-tools">
+    <input id="nb-search" placeholder="Cari pemain…" />
+    <select id="nb-pos"><option value="">Semua posisi</option></select>
+    <select id="nb-tier"><option value="">Semua tier</option><option>S</option><option>A</option><option>B</option><option>C</option></select>
+  </div>
+  <div id="nb-grid" class="nb-grid"></div>
+  <div id="nb-events" class="nb-events"></div>
+</div>
+<style>
+#ngebait-app{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#eaf0f6;background:#0c1117;padding:18px;border-radius:18px}
+.nb-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:15px}.nb-head b{font-size:25px}.nb-head span{opacity:.65}.nb-head small{opacity:.6}
+.nb-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}.nb-tools input,.nb-tools select{background:#151c25;color:#fff;border:1px solid #293544;border-radius:10px;padding:10px}
+.nb-tools input{flex:1;min-width:180px}.nb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.nb-card{background:#141b23;border:1px solid #263341;border-radius:15px;padding:14px}.nb-card .ovr{font-size:28px;font-weight:800}.nb-card .name{font-weight:700;margin:5px 0}.nb-card .meta{font-size:12px;opacity:.7}.nb-tier{font-size:11px;padding:3px 7px;border:1px solid #3a4655;border-radius:20px;float:right}
+.nb-events{margin-top:20px}.nb-event{padding:12px;border:1px solid #263341;border-radius:12px;margin:8px 0;background:#111820}.nb-event a{color:#fff;text-decoration:none;font-weight:650}
+.nb-empty{opacity:.6;padding:25px;text-align:center}
+</style>
+<script>
+(function(){
+  const BASE="https://GITHUB_USERNAME.github.io/GITHUB_REPO/data/";
+  const $=s=>document.querySelector(s);
+  let players=[], events=[];
+  function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
+  async function get(name){const r=await fetch(BASE+name+"?v="+Date.now(),{cache:"no-store"});if(!r.ok)throw Error(name+" "+r.status);return r.json();}
+  function render(){
+    const q=$("#nb-search").value.toLowerCase().trim(), pos=$("#nb-pos").value, tier=$("#nb-tier").value;
+    const rows=players.filter(p=>(!q||[p.name,p.club,p.nationality,p.position].join(" ").toLowerCase().includes(q))&&(!pos||p.position===pos)&&(!tier||p.tier===tier));
+    $("#nb-grid").innerHTML=rows.length?rows.map(p=>`<div class="nb-card"><span class="nb-tier">${esc(p.tier||"—")}</span><div class="ovr">${esc(p.ovr)}</div><div class="name">${esc(p.name)}</div><div class="meta">${esc(p.position)} · ${esc(p.club)}</div><div class="meta">${esc(p.nationality)}</div>${p.source?`<div class="meta" style="margin-top:8px"><a href="${esc(p.source)}" target="_blank" rel="noopener">Sumber</a></div>`:""}</div>`).join(""):`<div class="nb-empty">Pemain tidak ditemukan.</div>`;
+  }
+  function renderEvents(){
+    const list=events.slice(0,15);
+    $("#nb-events").innerHTML="<h3>Update / Event</h3>"+(list.length?list.map(e=>`<div class="nb-event"><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.title)}</a></div>`).join(""):`<div class="nb-empty">Belum ada event/news tersinkron.</div>`);
+  }
+  async function init(){
+    try{
+      const [p,e,m]=await Promise.all([get("players.json"),get("events.json"),get("meta.json")]);
+      players=p.players||[]; events=e.events||[];
+      const positions=[...new Set(players.map(x=>x.position).filter(Boolean))].sort();
+      $("#nb-pos").innerHTML='<option value="">Semua posisi</option>'+positions.map(x=>`<option>${esc(x)}</option>`).join("");
+      $("#nb-status").textContent="Update: "+new Date(m.updatedAt).toLocaleString("id-ID");
+      render(); renderEvents();
+    }catch(err){$("#nb-status").textContent="Gagal memuat database";$("#nb-grid").innerHTML='<div class="nb-empty">Cek BASE di kode widget dan pastikan GitHub Pages aktif.</div>';console.error(err);}
+  }
+  $("#nb-search").addEventListener("input",render);$("#nb-pos").addEventListener("change",render);$("#nb-tier").addEventListener("change",render);init();
+})();
+</script>
